@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+:root {
+  /* Palette from the KOODAL Landing design (Claude Design project). */
+  --background: #faf7ef;
+  --surface: #ffffff;
+  --ink: #15191a;
+  --muted: #5d6462;
+  --border: #e8e3d6;
+
+  --primary: #d4e031;
+  --primary-ink: #15191a;
+  --accent: #ff6a4d;
+  --teal: #0f7f76;
+
+  --dark-bg: #15191a;
+  --dark-muted: #b7bcb8;
+  --cream: #faf7ef;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+
+  --color-primary: var(--primary);
+  --color-primary-ink: var(--primary-ink);
+  --color-accent: var(--accent);
+  --color-teal: var(--teal);
+
+  --color-dark: var(--dark-bg);
+  --color-dark-muted: var(--dark-muted);
+  --color-cream: var(--cream);
+
+  --radius-md: 1.25rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2.125rem;
+
+  --font-sans: var(--font-dm-sans);
+  --font-heading: var(--font-bricolage);
+}
+
+body {
+  background: var(--background);
+  color: var(--ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--teal);
+}
+a:hover {
+  color: var(--accent);
+}
+
+@keyframes koodal-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes koodal-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes koodal-rise {
+  from {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Global reduced-motion safety net: any CSS-only transition/animation that a
+   component forgets to gate individually still collapses to instant here. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
