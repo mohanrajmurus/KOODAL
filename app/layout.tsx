@@ -20,8 +20,12 @@ const dmSans = DM_Sans({
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
+// `??` only falls back on null/undefined, not on "" — guard against a blank
+// (but present) env var too, e.g. an unfilled Vercel project env var.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(SITE_URL),
   title: "KOODAL — Plan irukku. Aal illa?",
   description:
     "KOODAL fills the missing headcount in your pickleball, padel, badminton, board game, and quiz night plans. Leave your WhatsApp or Instagram to get early access in Chennai.",
