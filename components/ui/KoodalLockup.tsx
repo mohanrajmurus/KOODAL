@@ -66,8 +66,12 @@ export function KoodalLockup({
               margin: `0 ${(-wordSize * 0.03).toFixed(2)}px`,
             }}
           >
-            <circle cx="17" cy="17" r="13" fill="none" stroke={ink} strokeWidth="7" />
-            <circle cx="41" cy="17" r="13" fill="none" stroke={accent} strokeWidth="7" />
+            {/* Overlap kept small on purpose: at nav/footer sizes (~11-14px
+                tall), the previous wider overlap anti-aliased into a single
+                blob instead of two readable rings, making the wordmark
+                misread as "KCODAL". */}
+            <circle cx="15" cy="16.5" r="12" fill="none" stroke={ink} strokeWidth="6" />
+            <circle cx="42" cy="16.5" r="12" fill="none" stroke={accent} strokeWidth="6" />
           </svg>
           <span>DAL</span>
         </div>

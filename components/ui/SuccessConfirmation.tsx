@@ -1,14 +1,6 @@
-interface SuccessConfirmationProps {
-  dark?: boolean;
-}
-
-export function SuccessConfirmation({ dark = false }: SuccessConfirmationProps) {
+export function SuccessConfirmation() {
   return (
-    <div
-      className="flex items-center gap-3.5"
-      style={{ animation: "koodal-rise 0.4s ease both" }}
-      role="status"
-    >
+    <div className="flex items-center gap-3.5" style={{ animation: "koodal-rise 0.4s ease both" }} role="status">
       <svg
         width="46"
         height="46"
@@ -31,14 +23,10 @@ export function SuccessConfirmation({ dark = false }: SuccessConfirmationProps) 
         />
       </svg>
       <div>
-        <p
-          className={`font-heading text-xl font-extrabold tracking-tight ${
-            dark ? "text-(--color-cream)" : "text-(--color-ink)"
-          }`}
-        >
+        <p className="font-heading text-xl font-extrabold tracking-tight text-cream">
           Nalla irukku — you&apos;re in.
         </p>
-        <p className={`mt-1 text-[15px] leading-snug ${dark ? "text-(--color-dark-muted)" : "text-(--color-muted)"}`}>
+        <p className="mt-1 text-[15px] leading-snug text-dark-muted">
           We&apos;ll message you the moment a plan near you needs people.
         </p>
       </div>

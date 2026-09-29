@@ -18,7 +18,11 @@ interface UseInViewOptions {
 export function useInView<T extends HTMLElement>(
   options: UseInViewOptions = {},
 ): { ref: React.RefObject<T | null>; inView: boolean } {
-  const { threshold = 0.2, rootMargin = "0px 0px -10% 0px", once = true } = options;
+  // threshold 0: reveal as soon as any part of the element enters view,
+  // rather than requiring a fixed fraction of its height to be visible —
+  // that fraction scales badly for very tall sections (e.g. the How it
+  // works timeline), which could stay invisible well past where they start.
+  const { threshold = 0, rootMargin = "0px 0px -10% 0px", once = true } = options;
   const ref = useRef<T | null>(null);
   const [observedInView, setObservedInView] = useState(false);
   const reducedMotion = useReducedMotion();

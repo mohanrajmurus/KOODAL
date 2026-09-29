@@ -1,23 +1,32 @@
-export type ActivityTag =
-  | "turf_cricket"
-  | "badminton"
-  | "table_tennis"
-  | "pickleball"
-  | "padel"
-  | "board_games"
-  | "quiz_nights"
-  | "beach_games"
-  | "photography_walks"
-  | "movie_groups"
-  | "theatre_cultural"
-  | "any";
+export type ActivityLabel =
+  | "Turf Cricket"
+  | "Badminton"
+  | "Table Tennis"
+  | "Pickleball"
+  | "Padel"
+  | "Board Games"
+  | "Quiz Nights"
+  | "Study Groups"
+  | "Beach Games"
+  | "Photography Walks"
+  | "Treks"
+  | "Movies"
+  | "Theatre"
+  | "Cultural Events";
 
-export type CtaSource = "hero" | "closing";
+/** Matches the three options the Signup Form offers; "" means unpicked. */
+export type Intent = "" | "I have a plan and need people" | "I want to join a plan" | "Both";
 
 export interface SignupPayload {
-  contact: string;
-  activity: ActivityTag;
-  source: CtaSource;
+  name: string;
+  whatsapp: string;
+  areaPincode: string;
+  /** Optional — the only field in the form that isn't required. */
+  email?: string;
+  activities: ActivityLabel[];
+  intent: Intent;
+  /** Required consent to be contacted, per India's DPDP Act. */
+  consent: boolean;
   /** Honeypot field — real visitors never fill this in. */
   _hp?: string;
 }

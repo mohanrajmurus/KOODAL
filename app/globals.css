@@ -50,11 +50,23 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a {
-  color: var(--teal);
+/* @layer base, not a bare rule: Tailwind v4's utilities (e.g. `text-white`)
+   live in @layer utilities, and unlayered CSS always beats layered CSS
+   regardless of specificity — a bare `a { color }` here would silently win
+   over every `text-*` utility applied to a link (this exact bug made the
+   WhatsApp/Instagram footer icons render in teal instead of white, making
+   the WhatsApp one invisible against its own teal background). */
+@layer base {
+  a {
+    color: var(--teal);
+  }
+  a:hover {
+    color: var(--accent);
+  }
 }
-a:hover {
-  color: var(--accent);
+
+html {
+  scroll-behavior: smooth;
 }
 
 @keyframes koodal-pop {

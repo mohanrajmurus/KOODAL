@@ -1,15 +1,23 @@
-import { validateContact } from "@/lib/validateContact";
-import { ACTIVITIES } from "@/lib/activities";
-import type { ActivityTag, CtaSource } from "@/lib/types";
+import { validateSignupFields } from "@/lib/validateSignup";
+import { ALL_ACTIVITIES } from "@/lib/activities";
+import { getSupabaseAdmin } from "@/lib/supabase";
+import type { Intent } from "@/lib/types";
 
-const VALID_ACTIVITIES: ActivityTag[] = [...ACTIVITIES.map((a) => a.id), "any"];
-const VALID_SOURCES: CtaSource[] = ["hero", "closing"];
+const VALID_INTENTS: Intent[] = [
+  "I have a plan and need people",
+  "I want to join a plan",
+  "Both",
+];
 
 export async function POST(request: Request) {
   let body: {
-    contact?: unknown;
-    activity?: unknown;
-    source?: unknown;
+    name?: unknown;
+    whatsapp?: unknown;
+    areaPincode?: unknown;
+    email?: unknown;
+    activities?: unknown;
+    intent?: unknown;
+    consent?: unknown;
     _hp?: unknown;
   };
 
@@ -25,48 +33,45 @@ export async function POST(request: Request) {
     return Response.json({ ok: true });
   }
 
-  const contact = typeof body.contact === "string" ? body.contact : "";
-  const { valid, error } = validateContact(contact);
+  const name = typeof body.name === "string" ? body.name : "";
+  const whatsapp = typeof body.whatsapp === "string" ? body.whatsapp : "";
+  const areaPincode = typeof body.areaPincode === "string" ? body.areaPincode : "";
+  const email = typeof body.email === "string" ? body.email : "";
+  const intent: Intent = VALID_INTENTS.includes(body.intent as Intent) ? (body.intent as Intent) : "";
+  const consent = body.consent === true;
+
+  const { valid, error } = validateSignupFields({ name, whatsapp, areaPincode, email, intent, consent });
   if (!valid) {
     return Response.json({ ok: false, error }, { status: 400 });
   }
 
-  const activity: ActivityTag = VALID_ACTIVITIES.includes(body.activity as ActivityTag)
-    ? (body.activity as ActivityTag)
-    : "any";
-  const source: CtaSource = VALID_SOURCES.includes(body.source as CtaSource)
-    ? (body.source as CtaSource)
-    : "hero";
+  const activities = Array.isArray(body.activities)
+    ? body.activities.filter(
+        (a): a is string => typeof a === "string" && ALL_ACTIVITIES.includes(a as never),
+      )
+    : [];
 
-  const webhookUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
-  if (!webhookUrl) {
-    console.error("GOOGLE_APPS_SCRIPT_URL is not configured.");
+  const supabase = getSupabaseAdmin();
+  if (!supabase) {
+    console.error("SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are not configured.");
     return Response.json(
       { ok: false, error: "Signups aren't set up yet. Try again shortly." },
       { status: 502 },
     );
   }
 
-  const payload = {
-    contact: contact.trim(),
-    activity,
-    source,
-    timestamp: new Date().toISOString(),
-  };
+  const { error: insertError } = await supabase.from("signups").insert({
+    name: name.trim(),
+    whatsapp: whatsapp.trim(),
+    area_pincode: areaPincode.trim(),
+    email: email.trim() || null,
+    activities,
+    intent,
+    consent,
+  });
 
-  try {
-    const webhookRes = await fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(8000),
-    });
-
-    if (!webhookRes.ok) {
-      throw new Error(`Webhook responded with ${webhookRes.status}`);
-    }
-  } catch (err) {
-    console.error("Failed to forward signup to Apps Script webhook:", err);
+  if (insertError) {
+    console.error("Failed to insert signup into Supabase:", insertError);
     return Response.json(
       { ok: false, error: "Couldn't save that just now. Please try again." },
       { status: 502 },

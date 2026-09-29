@@ -1,108 +1,138 @@
 "use client";
 
 import { createContext, useCallback, useContext, useState } from "react";
-import type { ActivityTag, CtaSource, SignupResponse } from "@/lib/types";
-import { validateContact } from "@/lib/validateContact";
+import type { ActivityLabel, Intent, SignupResponse } from "@/lib/types";
+import { validateSignupFields } from "@/lib/validateSignup";
 import { track } from "@/lib/analytics";
 
-export const HERO_FORM_INPUT_ID = "koodal-hero-input";
-export const CLOSING_FORM_INPUT_ID = "koodal-closing-input";
+/** The signup form's Name field — the natural focus target when a "Get Early Access" button scrolls to it. */
+export const FORM_NAME_INPUT_ID = "koodal-signup-name";
 
-const BASE_SIGNUP_COUNT = 148;
+export interface SubmitResult {
+  ok: boolean;
+  error?: string;
+}
 
 interface SignupContextValue {
-  activity: ActivityTag;
-  toggleActivity: (tag: Exclude<ActivityTag, "any">) => void;
-  contact: string;
-  setContact: (value: string) => void;
+  activities: ActivityLabel[];
+  toggleActivity: (label: ActivityLabel) => void;
+  intent: Intent;
+  setIntent: (value: Intent) => void;
+  name: string;
+  setName: (value: string) => void;
+  whatsapp: string;
+  setWhatsapp: (value: string) => void;
+  areaPincode: string;
+  setAreaPincode: (value: string) => void;
+  email: string;
+  setEmail: (value: string) => void;
+  consent: boolean;
+  setConsent: (value: boolean) => void;
   honeypot: string;
   setHoneypot: (value: string) => void;
-  activeSource: CtaSource;
-  setActiveSource: (source: CtaSource) => void;
   submitting: boolean;
   submitted: boolean;
-  error: string | null;
-  signupCount: number;
-  submit: () => Promise<void>;
+  /** Validates and submits; the caller (CtaForm) owns showing the returned error locally. */
+  submit: () => Promise<SubmitResult>;
 }
 
 const SignupContext = createContext<SignupContextValue | null>(null);
 
 /**
- * Both CTA forms (hero + closing) are projections of the same underlying
- * signup: one shared contact value, one shared submit, one shared success
- * state — matching the KOODAL Landing design, where typing or submitting in
- * either place reflects everywhere on the page.
+ * The single source of truth for the one signup form, which lives only in
+ * `SignupSection` — every "Get Early Access" button elsewhere on the page
+ * scrolls down to it rather than embedding its own copy.
  */
 export function SignupProvider({ children }: { children: React.ReactNode }) {
-  const [activity, setActivity] = useState<ActivityTag>("any");
-  const [contact, setContact] = useState("");
+  const [activities, setActivities] = useState<ActivityLabel[]>([]);
+  const [intent, setIntentState] = useState<Intent>("");
+  const [name, setName] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [areaPincode, setAreaPincode] = useState("");
+  const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
   const [honeypot, setHoneypot] = useState("");
-  const [activeSource, setActiveSource] = useState<CtaSource>("hero");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [signupCount, setSignupCount] = useState(BASE_SIGNUP_COUNT);
 
-  const toggleActivity = useCallback((tag: Exclude<ActivityTag, "any">) => {
-    setActivity((current) => (current === tag ? "any" : tag));
-    track("cta_click", { location: "activity_card", activity: tag });
+  const toggleActivity = useCallback((label: ActivityLabel) => {
+    setActivities((current) =>
+      current.includes(label) ? current.filter((a) => a !== label) : [...current, label],
+    );
+    track("cta_click", { location: "activity_pill", label });
   }, []);
 
-  const submit = useCallback(async () => {
-    track("cta_click", { location: `${activeSource}_form`, activity });
+  const setIntent = useCallback((value: Intent) => {
+    setIntentState((current) => (current === value ? "" : value));
+  }, []);
 
-    const { valid, error: validationError } = validateContact(contact);
+  const submit = useCallback(async (): Promise<SubmitResult> => {
+    track("cta_click", { location: "footer_form", intent, activities });
+
+    const { valid, error: validationError } = validateSignupFields({
+      name,
+      whatsapp,
+      areaPincode,
+      email,
+      intent,
+      consent,
+    });
     if (!valid) {
-      setError(validationError ?? "Please check your entry.");
-      return;
+      return { ok: false, error: validationError ?? "Please check your entries." };
     }
 
     setSubmitting(true);
-    setError(null);
-
     try {
       const res = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          contact: contact.trim(),
-          activity,
-          source: activeSource,
+          name: name.trim(),
+          whatsapp: whatsapp.trim(),
+          areaPincode: areaPincode.trim(),
+          email: email.trim(),
+          activities,
+          intent,
+          consent,
           _hp: honeypot,
         }),
       });
       const data: SignupResponse = await res.json();
 
       if (res.ok && data.ok) {
-        track("signup_success", { activity, source: activeSource });
+        track("signup_success", { activities, intent });
         setSubmitted(true);
-        setSignupCount((count) => count + 1);
-      } else {
-        setError(data.error ?? "Something went wrong. Try again in a moment.");
+        return { ok: true };
       }
+      return { ok: false, error: data.error ?? "Something went wrong. Try again in a moment." };
     } catch {
-      setError("Couldn't reach the server. Check your connection and try again.");
+      return { ok: false, error: "Couldn't reach the server. Check your connection and try again." };
     } finally {
       setSubmitting(false);
     }
-  }, [activity, activeSource, contact, honeypot]);
+  }, [activities, areaPincode, consent, email, honeypot, intent, name, whatsapp]);
 
   return (
     <SignupContext.Provider
       value={{
-        activity,
+        activities,
         toggleActivity,
-        contact,
-        setContact,
+        intent,
+        setIntent,
+        name,
+        setName,
+        whatsapp,
+        setWhatsapp,
+        areaPincode,
+        setAreaPincode,
+        email,
+        setEmail,
+        consent,
+        setConsent,
         honeypot,
         setHoneypot,
-        activeSource,
-        setActiveSource,
         submitting,
         submitted,
-        error,
-        signupCount,
         submit,
       }}
     >
