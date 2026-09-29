@@ -24,11 +24,30 @@ const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 // (but present) env var too, e.g. an unfilled Vercel project env var.
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
+const TITLE = "KOODAL — Plan irukku. Aal illa?";
+const DESCRIPTION =
+  "KOODAL fills the missing headcount in your plans — board games, quiz nights, treks, badminton, pickleball and more. Drop your details to get early access in Chennai.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "KOODAL — Plan irukku. Aal illa?",
-  description:
-    "KOODAL fills the missing headcount in your pickleball, padel, badminton, board game, and quiz night plans. Leave your WhatsApp or Instagram to get early access in Chennai.",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: "/",
+    siteName: "KOODAL",
+    locale: "en_IN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
