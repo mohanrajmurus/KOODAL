@@ -4,60 +4,134 @@ import { useEffect, useState } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { DEMO_PLANS } from "@/lib/activities";
 
-const ROTATE_MS = 3200;
+const DEMO_ROTATE_MS = 4200;
+const JOIN_TICK_MS = 800;
+const NAMES = ["Priya", "Arjun", "Divya", "Karthik", "Meera", "Vikram", "Sneha"];
 
 export function PlanPreviewCard() {
   const reducedMotion = useReducedMotion();
-  const [index, setIndex] = useState(0);
+  const [demo, setDemo] = useState(0);
+  const [joined, setJoined] = useState(0);
 
   useEffect(() => {
-    // Reduced motion: skip the rotation entirely rather than just speeding
-    // it up — the first demo stays put, satisfying "functional without
-    // animation" without a jarring instant-cycle fallback.
+    // Reduced motion: skip the rotation/join simulation entirely and show a
+    // settled, fully-confirmed plan instead of animating toward one.
     if (reducedMotion) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % DEMO_PLANS.length), ROTATE_MS);
-    return () => clearInterval(id);
+    const demoId = setInterval(() => {
+      setDemo((d) => (d + 1) % DEMO_PLANS.length);
+      setJoined(0);
+    }, DEMO_ROTATE_MS);
+    const joinId = setInterval(() => setJoined((j) => j + 1), JOIN_TICK_MS);
+    return () => {
+      clearInterval(demoId);
+      clearInterval(joinId);
+    };
   }, [reducedMotion]);
 
-  const demo = DEMO_PLANS[index];
+  const plan = DEMO_PLANS[demo];
+  const need = plan.need;
+  const have = need === 1 ? 3 : 2;
+  const total = have + need;
+  const filledCount = reducedMotion ? need : Math.min(joined, need);
+  const full = filledCount >= need;
+
+  const queue = [1, 2].map((offset) => {
+    const q = DEMO_PLANS[(demo + offset) % DEMO_PLANS.length];
+    return {
+      title: `${q.line1} ${q.line2}`.replace(",", " ·"),
+      when: q.when,
+      spots: q.spots,
+      dotClass: offset === 1 ? "bg-accent" : "bg-[#5fd3c6]",
+    };
+  });
+
+  const toastName = NAMES[(demo + have + filledCount - 1 + NAMES.length) % NAMES.length];
 
   return (
-    <div className="relative min-h-[300px]">
-      <div className="rotate-[-2deg] rounded-[30px] bg-teal p-6.5 text-white">
-        <div className="mb-3.5 min-h-4 text-[13px] font-bold tracking-wider text-white/70 uppercase">
-          {demo.when}
-        </div>
-        <div className="font-heading mb-4.5 min-h-16.5 text-[30px] leading-[1.08] font-extrabold tracking-tight">
-          {demo.line1}
-          <br />
-          {demo.line2}
-        </div>
-        <div className="mb-4.5 flex items-center gap-2.5">
-          <span className="h-8.5 w-8.5 rounded-full bg-primary" />
-          <span className="h-8.5 w-8.5 rounded-full bg-accent" />
-          <span className="grid h-8.5 w-8.5 place-items-center rounded-full border-2 border-dashed border-white/60 bg-white/18 text-lg font-bold">
-            +
-          </span>
-          <span className="grid h-8.5 w-8.5 place-items-center rounded-full border-2 border-dashed border-white/60 bg-white/18 text-lg font-bold">
-            +
+    <div className="relative">
+      <div className="flex flex-col gap-3.5 rounded-4xl bg-ink px-4.5 pt-5.5 pb-4.5 text-cream shadow-[10px_10px_0_#d4e031]">
+        <div className="flex items-center justify-between gap-2.5 px-1">
+          <div className="flex flex-col gap-0.5">
+            <span className="text-xs font-bold tracking-[0.1em] text-dark-muted uppercase">Plans near you</span>
+            <span className="font-heading text-[22px] font-extrabold tracking-[-0.02em]">Chennai</span>
+          </div>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/14 px-3 py-1.75 text-[13px] font-bold text-primary">
+            <span className="h-1.75 w-1.75 rounded-full bg-primary" />
+            Live
           </span>
         </div>
-        <div className="rounded-full bg-primary p-3 text-center text-[15px] font-bold text-primary-ink">
-          {demo.spots}
-        </div>
-        <div className="mt-3.5 flex justify-center gap-1.5" aria-hidden="true">
-          {DEMO_PLANS.map((plan, i) => (
+
+        <div className="flex flex-col gap-3.5 rounded-[22px] bg-background p-4.5 text-ink">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex min-w-0 flex-col gap-1.5">
+              <span className="min-h-[15px] text-xs font-bold tracking-[0.06em] text-muted uppercase">
+                {plan.when}
+              </span>
+              <span className="font-heading min-h-13.5 text-[26px] leading-[1.05] font-extrabold tracking-[-0.02em]">
+                {plan.line1} {plan.line2}
+              </span>
+            </div>
             <span
-              key={plan.when}
-              className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-300 ${
-                i === index ? "bg-primary" : "bg-white/35"
+              className={`shrink-0 rounded-full px-3 py-1.5 text-[13px] font-bold text-ink transition-colors duration-300 ${
+                full ? "bg-primary" : "bg-[#efeadc]"
               }`}
-            />
-          ))}
+            >
+              {full ? "Full ✓" : "Open"}
+            </span>
+          </div>
+
+          <div className="flex gap-1.5">
+            {Array.from({ length: total }, (_, i) => {
+              const filled = i < have + filledCount;
+              const fresh = i >= have && i < have + filledCount;
+              return (
+                <span
+                  key={i}
+                  className={`font-heading grid h-10 flex-1 place-items-center rounded-xl border-2 text-base font-extrabold transition-[background-color,border-color,transform] duration-300 ${
+                    fresh
+                      ? "scale-[1.06] border-primary bg-primary text-ink"
+                      : filled
+                        ? "border-teal bg-teal text-white"
+                        : "border-dashed border-[#c9c4b6] text-muted"
+                  }`}
+                >
+                  {filled ? (fresh ? NAMES[(demo + i) % NAMES.length][0] : "") : "+"}
+                </span>
+              );
+            })}
+          </div>
+
+          <div className="flex items-center justify-between gap-2.5 text-sm">
+            <span className="font-bold">
+              {have + filledCount}/{total} confirmed
+            </span>
+            <span className="text-muted">{full ? "Plan is on" : `${need - filledCount} more needed`}</span>
+          </div>
         </div>
+
+        {queue.map((q) => (
+          <div
+            key={q.title}
+            className="flex items-center gap-3 rounded-[18px] border border-cream/10 bg-cream/6 px-3.5 py-3"
+          >
+            <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${q.dotClass}`} />
+            <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span className="truncate text-[15px] font-bold">{q.title}</span>
+              <span className="truncate text-[13px] text-dark-muted">{q.when}</span>
+            </span>
+            <span className="shrink-0 text-[13px] font-bold whitespace-nowrap text-primary">{q.spots}</span>
+          </div>
+        ))}
       </div>
-      <div className="absolute -right-1.5 -bottom-4.5 rotate-3 rounded-2xl border-2 border-ink bg-background px-4 py-3 text-sm font-bold text-ink">
-        Aal kedaichaanga ✦
+
+      <div
+        className={`absolute -right-1.5 bottom-0 flex items-center gap-2.5 rounded-full border-2 border-ink bg-background py-1.75 pr-4 pl-2 text-sm font-bold text-ink transition-[opacity,transform] duration-300 ${
+          filledCount > 0 ? "translate-y-0 rotate-2 opacity-100" : "translate-y-2 rotate-2 opacity-0"
+        }`}
+        aria-hidden={filledCount <= 0}
+      >
+        <span className="h-6.5 w-6.5 shrink-0 rounded-full bg-accent" />
+        <span>{filledCount > 0 ? `${toastName} joined your plan` : ""}</span>
       </div>
     </div>
   );

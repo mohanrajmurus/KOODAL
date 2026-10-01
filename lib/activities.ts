@@ -30,14 +30,16 @@ export interface DemoPlan {
   line1: string;
   line2: string;
   spots: string;
+  /** How many more people this plan needs — drives the hero card's live headcount fill. */
+  need: number;
 }
 
-/** Rotates in the hero's illustrative plan card — see components/ui/PlanPreviewCard.tsx. */
+/** Rotates in the hero's illustrative "Plans near you" card — see components/ui/PlanPreviewCard.tsx. */
 export const DEMO_PLANS: DemoPlan[] = [
-  { when: "Saturday 6am · Sholinganallur turf", line1: "Box cricket,", line2: "short by three", spots: "3 spots left" },
-  { when: "Friday 7pm · Adyar café", line1: "Board games,", line2: "table of six", spots: "2 spots left" },
-  { when: "Wednesday 8pm · Doubles", line1: "Badminton,", line2: "missing a fourth", spots: "1 spot left" },
-  { when: "Saturday 4pm · Gaming café", line1: "LAN session,", line2: "squad short by two", spots: "2 spots left" },
-  { when: "Sunday 7am · Pickleball", line1: "Pickleball,", line2: "need two more", spots: "2 spots left" },
-  { when: "Sunday 5:30am · ECR ride", line1: "Morning ride,", line2: "open to four more", spots: "4 spots left" },
+  { when: "Sat 6 AM · Sholinganallur turf", line1: "Box cricket,", line2: "need 3", spots: "3 spots left", need: 3 },
+  { when: "Fri 7 PM · Adyar café", line1: "Board game night,", line2: "need 2", spots: "2 spots left", need: 2 },
+  { when: "Wed 8 PM · Doubles", line1: "Badminton,", line2: "need 1", spots: "1 spot left", need: 1 },
+  { when: "Sat 4 PM · Gaming café", line1: "Console / LAN session,", line2: "need 2", spots: "2 spots left", need: 2 },
+  { when: "Sun 7 AM", line1: "Pickleball,", line2: "need 2", spots: "2 spots left", need: 2 },
+  { when: "Sun 5:30 AM · ECR", line1: "Morning ride,", line2: "open to 4 more", spots: "4 spots open", need: 4 },
 ];

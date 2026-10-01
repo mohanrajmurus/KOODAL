@@ -31,9 +31,8 @@ export function Hero() {
           Post the plan you already have. KOODAL helps you find the people nearby to complete it.
         </p>
 
-        <div className="flex flex-col items-start gap-2.5">
+        <div className="flex flex-wrap gap-3">
           <CountMeInButton location="hero" variant="heroSolid" />
-          <span className="pl-1 text-sm text-muted">Name, WhatsApp number, area — that&apos;s it.</span>
         </div>
 
         <div className="mt-5.5 flex items-center gap-3">
@@ -42,7 +41,7 @@ export function Hero() {
             <span className="-ml-2.5 h-7.5 w-7.5 rounded-full border-2 border-background bg-accent" />
             <span className="-ml-2.5 h-7.5 w-7.5 rounded-full border-2 border-background bg-primary" />
           </div>
-          <span className="text-sm font-medium text-muted">Currently onboarding the first group</span>
+          <span className="text-sm font-medium text-muted">Now starting in Chennai · onboarding the first group</span>
         </div>
       </div>
 
