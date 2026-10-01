@@ -41,7 +41,7 @@ export function PlanPreviewCard() {
       title: `${q.line1} ${q.line2}`.replace(",", " ·"),
       when: q.when,
       spots: q.spots,
-      dotClass: offset === 1 ? "bg-accent" : "bg-[#5fd3c6]",
+      dotClass: offset === 1 ? "bg-accent" : "bg-primary",
     };
   });
 
@@ -49,14 +49,14 @@ export function PlanPreviewCard() {
 
   return (
     <div className="relative">
-      <div className="flex flex-col gap-3.5 rounded-4xl bg-ink px-4.5 pt-5.5 pb-4.5 text-cream shadow-[10px_10px_0_#d4e031]">
+      <div className="flex flex-col gap-3.5 rounded-4xl bg-teal px-4.5 pt-5.5 pb-4.5 text-white shadow-[10px_10px_0_#d4e031]">
         <div className="flex items-center justify-between gap-2.5 px-1">
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs font-bold tracking-[0.1em] text-dark-muted uppercase">Plans near you</span>
+            <span className="text-xs font-bold tracking-[0.1em] text-[#d3ece7] uppercase">Plans near you</span>
             <span className="font-heading text-[22px] font-extrabold tracking-[-0.02em]">Chennai</span>
           </div>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/14 px-3 py-1.75 text-[13px] font-bold text-primary">
-            <span className="h-1.75 w-1.75 rounded-full bg-primary" />
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.75 text-[13px] font-bold text-ink">
+            <span className="h-1.75 w-1.75 rounded-full bg-ink" />
             Live
           </span>
         </div>
@@ -112,14 +112,14 @@ export function PlanPreviewCard() {
         {queue.map((q) => (
           <div
             key={q.title}
-            className="flex items-center gap-3 rounded-[18px] border border-cream/10 bg-cream/6 px-3.5 py-3"
+            className="flex items-center gap-3 rounded-[18px] border border-white/18 bg-white/10 px-3.5 py-3"
           >
             <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${q.dotClass}`} />
             <span className="flex min-w-0 flex-1 flex-col gap-0.5">
               <span className="truncate text-[15px] font-bold">{q.title}</span>
-              <span className="truncate text-[13px] text-dark-muted">{q.when}</span>
+              <span className="truncate text-[13px] text-[#d3ece7]">{q.when}</span>
             </span>
-            <span className="shrink-0 text-[13px] font-bold whitespace-nowrap text-primary">{q.spots}</span>
+            <span className="shrink-0 text-[13px] font-bold whitespace-nowrap text-[#e9f08a]">{q.spots}</span>
           </div>
         ))}
       </div>
