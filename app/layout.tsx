@@ -26,7 +26,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 const TITLE = "KOODAL — Plan irukku. Aal illa?";
 const DESCRIPTION =
-  "KOODAL fills the missing headcount in your plans — board games, quiz nights, treks, badminton, pickleball and more. Drop your details to get early access in Chennai.";
+  "KOODAL fills the missing headcount in your plans — box cricket, badminton, pickleball, board games, gaming and cycling. Drop your details to get early access in Chennai.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

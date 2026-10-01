@@ -155,7 +155,7 @@ export function HowItWorks() {
                       className="h-2 w-2 shrink-0 rounded-full"
                       style={{ background: on ? step.tone : "rgba(250,247,239,0.3)" }}
                     />
-                    <span className="font-bold">Turf cricket</span>
+                    <span className="font-bold">Box cricket</span>
                     <span className="opacity-55">·</span>
                     <span>{step.status}</span>
                   </div>

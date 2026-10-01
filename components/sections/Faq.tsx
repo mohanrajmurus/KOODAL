@@ -5,11 +5,11 @@ import { useState } from "react";
 const FAQS = [
   {
     q: "What is KOODAL?",
-    a: "KOODAL helps you find people to join your plans. Whether it's badminton, board games, a quiz night, a trek, or just a casual outing, post your plan and find people nearby who are interested.",
+    a: "KOODAL fills the missing people in your plans — not the venue. Post what you're doing and how many you're short, and find people nearby who want in.",
   },
   {
     q: "What can I use KOODAL for?",
-    a: "Anything you want to do with a group. Sports, board games, quiz nights, study groups, outings, treks and more. KOODAL is activity-agnostic — it's not just for sports.",
+    a: "Six activities to start: box cricket, badminton, pickleball, board games, in-person gaming, and cycling. KOODAL doesn't do bookings — book your turf or court wherever you already do, KOODAL just fills the people.",
   },
   {
     q: "How does KOODAL work?",

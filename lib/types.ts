@@ -1,18 +1,5 @@
-export type ActivityLabel =
-  | "Turf Cricket"
-  | "Badminton"
-  | "Table Tennis"
-  | "Pickleball"
-  | "Padel"
-  | "Board Games"
-  | "Quiz Nights"
-  | "Study Groups"
-  | "Beach Games"
-  | "Photography Walks"
-  | "Treks"
-  | "Movies"
-  | "Theatre"
-  | "Cultural Events";
+/** The six MVP activities — see "MVP activities" in the PRD. */
+export type ActivityLabel = "Box Cricket" | "Board Games" | "Badminton" | "Gaming" | "Pickleball" | "Cycling";
 
 /** Matches the three options the Signup Form offers; "" means unpicked. */
 export type Intent = "" | "I have a plan and need people" | "I want to join a plan" | "Both";

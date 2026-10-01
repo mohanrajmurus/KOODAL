@@ -51,7 +51,7 @@ export default function OpengraphImage() {
             marginTop: 24,
           }}
         >
-          Find your people for board games, quiz nights, treks, badminton & more.
+          Find your people for box cricket, badminton, pickleball, board games & more.
         </div>
       </div>
     ),
