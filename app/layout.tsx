@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/next";
 import { SignupProvider } from "@/context/SignupProvider";
 import "./globals.css";
 
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <SignupProvider>{children}</SignupProvider>
         {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
+        <Analytics />
       </body>
     </html>
   );
