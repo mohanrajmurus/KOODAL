@@ -1,5 +1,5 @@
 import { KoodalLockup } from "@/components/ui/KoodalLockup";
-import { InstagramGlyph, WhatsAppGlyph } from "@/components/ui/SocialIcons";
+import { InstagramGlyph } from "@/components/ui/SocialIcons";
 
 const SOCIALS = [
   {
@@ -7,12 +7,6 @@ const SOCIALS = [
     label: "Instagram",
     className: "bg-accent",
     icon: <InstagramGlyph className="h-5 w-5" />,
-  },
-  {
-    href: "https://chat.whatsapp.com/koodal-chennai",
-    label: "WhatsApp community",
-    className: "bg-teal",
-    icon: <WhatsAppGlyph className="h-5 w-5" />,
   },
 ];
 
@@ -48,6 +42,9 @@ export function Footer() {
             {link.label}
           </a>
         ))}
+        <a href="mailto:koodal.chennai@zohomail.in" className="text-muted">
+          koodal.chennai@zohomail.in
+        </a>
         <span className="flex-1" />
         <span>© 2026 KOODAL · Chennai</span>
       </div>
