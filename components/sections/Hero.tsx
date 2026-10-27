@@ -25,7 +25,7 @@ export function Hero() {
         </h1>
 
         <p className="font-heading mb-3.5 max-w-[24em] text-[clamp(20px,3.4vw,25px)] leading-tight font-semibold tracking-[-0.02em] text-ink">
-          Find people nearby to complete your plan.
+          Find players nearby for box cricket, badminton &amp; more in Chennai.
         </p>
         <p className="mb-6.5 max-w-[32em] text-[17px] leading-normal text-pretty text-[#43494a]">
           Post the plan you already have. KOODAL helps you find the people nearby to complete it.

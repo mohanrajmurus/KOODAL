@@ -1,5 +1,7 @@
 import { ImageResponse } from "next/og";
 
+export const alt =
+  "KOODAL — Plan irukku. Aal illa? Find your people for box cricket, badminton, pickleball, board games & more in Chennai.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

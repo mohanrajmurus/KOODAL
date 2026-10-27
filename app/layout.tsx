@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SignupProvider } from "@/context/SignupProvider";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -21,23 +22,23 @@ const dmSans = DM_Sans({
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
-// `??` only falls back on null/undefined, not on "" — guard against a blank
-// (but present) env var too, e.g. an unfilled Vercel project env var.
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-
-const TITLE = "KOODAL — Plan irukku. Aal illa?";
+// The search title carries the keywords people actually type; the Tanglish
+// tagline is kept for social shares (WhatsApp/Instagram), where the voice is
+// the hook and the reader already has context.
+const SEARCH_TITLE = "KOODAL: Find Players Near You in Chennai | Box Cricket & More";
+const SOCIAL_TITLE = "KOODAL — Plan irukku. Aal illa?";
 const DESCRIPTION =
-  "KOODAL fills the missing headcount in your plans — box cricket, badminton, pickleball, board games, gaming and cycling. Drop your details to get early access in Chennai.";
+  "Short on players? KOODAL finds people near you in Chennai for box cricket, badminton, pickleball, board games, gaming & cycling. Get early access.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: TITLE,
+  title: SEARCH_TITLE,
   description: DESCRIPTION,
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: TITLE,
+    title: SOCIAL_TITLE,
     description: DESCRIPTION,
     url: "/",
     siteName: "KOODAL",
@@ -46,7 +47,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: TITLE,
+    title: SOCIAL_TITLE,
     description: DESCRIPTION,
   },
 };

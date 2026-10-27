@@ -15,7 +15,7 @@ export function Activities() {
   return (
     <section id="activities" className="scroll-mt-17.5 pt-18">
       <RevealOnScroll>
-        <div className="mb-2.5 text-[13px] font-bold tracking-[0.12em] text-teal uppercase">Activities</div>
+        <div className="mb-2.5 text-[13px] font-bold tracking-[0.12em] text-teal uppercase">Sports &amp; games in Chennai</div>
         <h2 className="font-heading mb-3 text-[clamp(34px,7vw,56px)] leading-none font-extrabold tracking-[-0.035em] text-ink">
           What are you <span className="text-accent">up for?</span>
         </h2>

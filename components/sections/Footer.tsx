@@ -1,9 +1,10 @@
 import { KoodalLockup } from "@/components/ui/KoodalLockup";
 import { InstagramGlyph } from "@/components/ui/SocialIcons";
+import { INSTAGRAM_URL } from "@/lib/site";
 
 const SOCIALS = [
   {
-    href: "https://instagram.com/koodal.in",
+    href: INSTAGRAM_URL,
     label: "Instagram",
     className: "bg-accent",
     icon: <InstagramGlyph className="h-5 w-5" />,
