@@ -14,9 +14,6 @@ export function LegalPage({ title, children }: { title: string; children: ReactN
           <Link href="/" aria-label="KOODAL home" className="flex text-ink hover:text-ink">
             <KoodalLockup size={30} />
           </Link>
-          <Link href="/" className="text-[15px] font-medium text-ink hover:text-accent">
-            ← Back to home
-          </Link>
         </nav>
       </header>
       <main className="mx-auto flex w-full max-w-275 flex-1 flex-col px-5">
