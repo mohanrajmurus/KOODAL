@@ -174,7 +174,11 @@ export function CtaForm() {
         />
         <span className="text-sm leading-snug text-dark-muted">
           I agree to be contacted about KOODAL plans on WhatsApp or email. We&apos;ll only use this to reach
-          you about plans near you and occasional updates — never shared with anyone else.
+          you about plans near you and occasional updates — never shared with anyone else. See our{" "}
+          <a href="/privacy" target="_blank" className="text-primary underline hover:text-primary">
+            Privacy Policy
+          </a>
+          .
         </span>
       </label>
 

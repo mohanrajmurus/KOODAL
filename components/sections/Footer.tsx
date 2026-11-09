@@ -1,6 +1,7 @@
 import { KoodalLockup } from "@/components/ui/KoodalLockup";
 import { InstagramGlyph } from "@/components/ui/SocialIcons";
 import { INSTAGRAM_URL } from "@/lib/site";
+import { LEGAL } from "@/lib/legal";
 
 const SOCIALS = [
   {
@@ -12,9 +13,12 @@ const SOCIALS = [
 ];
 
 const LINKS = [
-  { href: "#how-it-works", label: "How it works" },
-  { href: "#activities", label: "Activities" },
-  { href: "#faq", label: "FAQs" },
+  // "/#…" rather than "#…" so these still work from /privacy and /terms.
+  { href: "/#how-it-works", label: "How it works" },
+  { href: "/#activities", label: "Activities" },
+  { href: "/#faq", label: "FAQs" },
+  { href: "/privacy", label: "Privacy Policy" },
+  { href: "/terms", label: "Terms" },
 ];
 
 export function Footer() {
@@ -43,8 +47,8 @@ export function Footer() {
             {link.label}
           </a>
         ))}
-        <a href="mailto:koodal.chennai@zohomail.in" className="text-muted">
-          koodal.chennai@zohomail.in
+        <a href={`mailto:${LEGAL.supportEmail}`} className="text-muted">
+          {LEGAL.supportEmail}
         </a>
         <span className="flex-1" />
         <span>© 2026 KOODAL · Chennai</span>
